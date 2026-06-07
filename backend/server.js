@@ -123,12 +123,16 @@ app.post('/api/chat', async (req, res) => {
   if (userType === 'shipper') systemPrompt = SHIPPER_SYSTEM_PROMPT;
   if (userType === 'carrier') systemPrompt = CARRIER_SYSTEM_PROMPT;
 
+  const validMessages = messages && messages.length > 0 
+    ? messages 
+    : [{ role: 'user', content: 'Hello, I want to get started.' }];
+
   try {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
       system: systemPrompt,
-      messages: messages,
+      messages: validMessages,
     });
 
     const assistantMessage = response.content[0].text;
