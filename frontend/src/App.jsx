@@ -1,5 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
+function renderText(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br/>');
+}
+
 const API_URL = "https://truckingonboarding-production.up.railway.app";
 
 function Message({ msg }) {
@@ -30,7 +37,7 @@ function Message({ msg }) {
         lineHeight: 1.6,
         whiteSpace: "pre-wrap",
       }}>
-        {msg.content}
+        <span dangerouslySetInnerHTML={{ __html: renderText(msg.content) }} />
       </div>
     </div>
   );
