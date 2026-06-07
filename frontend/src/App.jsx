@@ -73,11 +73,17 @@ export default function App() {
     }
 
     try {
+      // Filter out the initial hardcoded welcome message before sending to API
+      const apiMessages = newMessages.filter((m, index) => {
+        if (index === 0 && m.role === "assistant") return false;
+        return true;
+      });
+      
       const res = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: newMessages.map(m => ({ role: m.role, content: m.content })),
+          messages: apiMessages.map(m => ({ role: m.role, content: m.content })),
           userType: detectedType,
         }),
       });
