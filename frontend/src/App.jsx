@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://truckingonboarding-production.up.railway.app";
 
 function Message({ msg }) {
   const isUser = msg.role === "user";
