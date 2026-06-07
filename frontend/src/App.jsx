@@ -37,7 +37,10 @@ function Message({ msg }) {
 }
 
 export default function App() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{
+    role: "assistant",
+    content: `Welcome to our Logistics Onboarding! 🚛\n\nI will help get you set up quickly. This should take about 10-15 minutes.\n\nAre you joining us as a:\n1. Shipper (you have freight that needs to be moved)\n2. Carrier (you are a truck driver or fleet looking for loads)\n\nPlease reply with 1 or 2 to get started!`
+  }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [userType, setUserType] = useState(null);
@@ -46,32 +49,10 @@ export default function App() {
   const bottomRef = useRef(null);
 
   // Start conversation on load
-  useEffect(() => {
-    startConversation();
-  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
-
-  async function startConversation() {
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_URL}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          messages: [{ role: "user", content: "start" }], 
-          userType: null 
-        }),
-      });
-      const data = await res.json();
-      setMessages([{ role: "assistant", content: data.message }]);
-    } catch {
-      setMessages([{ role: "assistant", content: "Welcome! Are you joining us as a Shipper (1) or Carrier (2)?" }]);
-    }
-    setLoading(false);
-  }
 
   async function sendMessage() {
     if (!input.trim() || loading) return;
